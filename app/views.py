@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-
+from .models import TODO
 from .forms import TODOForm
 # Create your views here.
 
 # Home page
 def home(request):
-  form = TODOForm()
-  return render(request, 'index.html', {'form':form})
+  if request.user.is_authenticated:
+    user = request.user
+    form = TODOForm()
+    todos = TODO.objects.filter(user=user)
+    return render(request, 'index.html', {'form':form,'todos':todos})
 
 # Login Page
 def loginuser(request):
