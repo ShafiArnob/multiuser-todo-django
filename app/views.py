@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
+from .forms import TODOForm
 # Create your views here.
 
 # Home page
 def home(request):
-  return render(request, 'index.html')
+  form = TODOForm()
+  return render(request, 'index.html', {'form':form})
 
 # Login Page
 def loginuser(request):
@@ -33,7 +36,6 @@ def loginuser(request):
     }
     return render(request , 'login.html' , context=context )
 
-
 # Signup Page
 def signup(request):
   if request.method == "POST":
@@ -49,3 +51,21 @@ def signup(request):
     'form':fm,
     }
     return render(request,'signup.html',context)
+
+
+# 
+def add_todo(request):
+  # check if the user is logged in 
+  if request.user.is_authenticated:
+    user = request.user # gets the user
+    print(user)
+    fm = TODOForm(request.POST)
+    if fm.is_valid():
+      print(fm.cleaned_data)
+      todo = fm.save(commit=False)
+      todo.user = user
+      todo.save()
+      print(todo)
+      return redirect("home")
+    else:
+      return render(request,'index.html', context={'form':fm})
