@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from .models import TODO
 from .forms import TODOForm
 # Create your views here.
 
 # Home page
+@login_required(login_url='login') # sends to login page if user not logged in
 def home(request):
   if request.user.is_authenticated:
     user = request.user
@@ -39,6 +41,10 @@ def loginuser(request):
     }
     return render(request , 'login.html' , context=context )
 
+# 
+def logout_user(request):
+  logout(request)
+  return redirect('login')
 # Signup Page
 def signup(request):
   if request.method == "POST":
@@ -57,6 +63,7 @@ def signup(request):
 
 
 # 
+@login_required(login_url='login') # you can only add things if you are logged in
 def add_todo(request):
   # check if the user is logged in 
   if request.user.is_authenticated:
