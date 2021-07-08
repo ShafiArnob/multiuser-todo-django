@@ -61,7 +61,6 @@ def signup(request):
     }
     return render(request,'signup.html',context)
 
-
 # 
 @login_required(login_url='login') # you can only add things if you are logged in
 def add_todo(request):
@@ -79,3 +78,9 @@ def add_todo(request):
       return redirect("home")
     else:
       return render(request,'index.html', context={'form':fm})
+
+#
+def delete_item(request,id):
+  print(id)
+  TODO.objects.get(pk=id).delete()
+  return redirect('home')

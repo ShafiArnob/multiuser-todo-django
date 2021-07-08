@@ -17,7 +17,18 @@
 
       <div class="col">
         <div class='border'>
-          <div>
+        {% if todos|length == 0 %}
+          <div class="p-4">
+          <br>
+          <br>
+            <div class="alert alert-danger text-center">
+              <p style="font-size:30px;">No TODOs</p>
+            </div>
+            <br>
+            <br>
+          </div>
+        {% else %}
+        <div>
             <table class="table">
               <thead>
                 <tr>
@@ -36,12 +47,14 @@
                   <td>{{todo.title}}</td>
                   <td>{{todo.status}}</td>
                   <td>{{todo.priority}}</td>
-                  <td><a href=""></a></td>
+                  <td><a href="{% url 'delete' todo.id %}" class="btn btn-danger">Delete</a></td>
                 </tr>
               {% endfor %}
               </tbody>
             </table>
           </div>
+        {% endif %}
+          
         </div>
       </div>
     </div>
