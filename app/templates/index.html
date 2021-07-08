@@ -36,7 +36,11 @@
                   <th>Title</th>
                   <th>Status</th>
                   <th>Priority</th>
-                  <th>Delete</th>
+                  <th >
+                  <div class='ms-5 ps-5'>
+                  Action
+                  </div>
+                  </th>
                 </tr>
               </thead>
 
@@ -45,9 +49,22 @@
                 <tr>
                   <td>{{forloop.counter}}</td>
                   <td>{{todo.title}}</td>
-                  <td>{{todo.status}}</td>
+                  <td>
+                    {% if todo.status == "P" %}
+                      Pending
+                    {% else %}
+                      Completed
+                    {% endif %}
+                  </td>
                   <td>{{todo.priority}}</td>
-                  <td><a href="{% url 'delete' todo.id %}" class="btn btn-danger">Delete</a></td>
+                  <td>
+                    <a href="{% url 'delete' todo.id %}" class="btn btn-danger">Delete</a>
+                    {% if todo.status == 'P' %}
+                    <a href="change-status/{{todo.id}}/C" class="btn btn-success">Completed</a>
+                    {% else %}
+                    <a href="change-status/{{todo.id}}/P" class="btn btn-warning">Pending</a>
+                    {% endif %}
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>

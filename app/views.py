@@ -13,7 +13,8 @@ def home(request):
   if request.user.is_authenticated:
     user = request.user
     form = TODOForm()
-    todos = TODO.objects.filter(user=user)
+    # proiority not working
+    todos = TODO.objects.filter(user=user).order_by('priority')
     return render(request, 'index.html', {'form':form,'todos':todos})
 
 # Login Page
@@ -84,3 +85,9 @@ def delete_item(request,id):
   print(id)
   TODO.objects.get(pk=id).delete()
   return redirect('home')
+
+def change_status(request , id  , status):
+    todo = TODO.objects.get(pk = id)
+    todo.status = status
+    todo.save()
+    return redirect('home')
